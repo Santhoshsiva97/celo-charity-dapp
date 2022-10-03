@@ -1,10 +1,10 @@
 
 # Celo Charity Dapp
 
-# Proposal Creator View:
+# Donater/Contributor view:
 ![Celo-Charity-img-creator](https://user-images.githubusercontent.com/49669209/193618319-aec4d777-c980-489f-b298-e2438bbba9ac.png)
 
-# Donater/Contributor view:
+# Proposal Creator View:
 ![Celo-Charity-img-contributor](https://user-images.githubusercontent.com/49669209/193618433-0f8b4720-63a6-4324-b015-80346aefdda2.png)
 
 
