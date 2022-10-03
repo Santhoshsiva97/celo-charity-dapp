@@ -111,7 +111,7 @@ contract Charity {
         currentProposal.isActive = _status;
     }
 
-    /// @dev Read Proposal: To retrive the proposal by index
+    /// @dev Read Proposal: To retrieve the proposal by index
     /// @return Proposal details of a proposal
     function readProposal(uint256 _index)
         public
