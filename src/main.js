@@ -299,6 +299,7 @@ document
     }
     notification(`🎉 You successfully added "${params[0]}".`)
     getProposals()
+    setTimeout(notificationOff, 5000);
   })
 
 // Donation module: Contributors will be able to access this module for donating funds
@@ -330,6 +331,7 @@ document.querySelector("#charity").addEventListener("click", async (e) => {
     } else {
       notification(`⚠️ Donation amount should be greater than 0.01 cUSD.`)
     }
+    setTimeout(notificationOff, 5000);
   }
 })  
 
@@ -359,6 +361,7 @@ document.querySelector("#charity").addEventListener("click", async (e) => {
     }
     notification(`🎉 You successfully updated the "${params[1]}".`)
     getProposals()
+    setTimeout(notificationOff, 5000);
   }
 })
 
@@ -379,6 +382,7 @@ document.querySelector("#charity").addEventListener("click", async (e) => {
     }
     notification(`🎉 You successfully deleted the "${name}".`)
     getProposals()
+    setTimeout(notificationOff, 5000);
   }
 })
 
