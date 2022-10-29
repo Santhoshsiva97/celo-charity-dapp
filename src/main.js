@@ -49,7 +49,7 @@ async function approve(_price) {
 const getBalance = async function () {
   const totalBalance = await kit.getTotalBalance(kit.defaultAccount)
   const cUSDBalance = totalBalance.cUSD.shiftedBy(-ERC20_DECIMALS).toFixed(2)
-  console.log('totalBalance::::', cUSDBalance)
+  // console.log('totalBalance::::', cUSDBalance)
   document.querySelector("#balance").textContent = cUSDBalance
 }
 
@@ -98,7 +98,7 @@ function renderProposals() {
 */
 function proposalTemplate(_proposal) {
 
-  console.log('toFixed::::::::::', )
+  // console.log('toFixed::::::::::', )
   return `
     <div class="card mb-4">
       <img class="card-img-top" src="${_proposal.image}" alt="...">
@@ -288,7 +288,7 @@ document
       document.getElementById("newImgUrl").value,
       new BigNumber(document.getElementById("newAmount").value).shiftedBy(ERC20_DECIMALS).toFixed(),
     ]
-    console.log('params::::', params)
+    // console.log('params::::', params)
     notification(`⌛ Adding "${params[0]}"...`)
     try {
       const result = await contract.methods
@@ -337,11 +337,11 @@ document.querySelector("#charity").addEventListener("click", async (e) => {
 
 // Edit & Save: Modified proposal will be save to the contract
 document.querySelector("#charity").addEventListener("click", async (e) => {
-  console.log('e::::', e);
+  // console.log('e::::', e);
   if (e.target.className.includes("saveProposalBtn")) {
     let indexSplit = (e.target.id).split('-');
     const index = indexSplit[1];
-    console.log('index::::', index, document.getElementById("editStatus-" + index).checked);
+    // console.log('index::::', index, document.getElementById("editStatus-" + index).checked);
     const params = [
       index,
       document.getElementById("editProposalName-" + index).value,
@@ -350,7 +350,7 @@ document.querySelector("#charity").addEventListener("click", async (e) => {
       new BigNumber(document.getElementById("editAmount-" + index).value).shiftedBy(ERC20_DECIMALS).toFixed(),
       (document.getElementById("editStatus-" + index).checked == true) ? true : false,
     ]
-    console.log('param:::', params)
+    // console.log('param:::', params)
     notification(`⌛ Editing Proposal "${params[1]}"...`)
     try {
       const result = await contract.methods
@@ -370,7 +370,7 @@ document.querySelector("#charity").addEventListener("click", async (e) => {
   if (e.target.className.includes("cancelBtn")) {
     let indexSplit = (e.target.id).split('-');
     const index = indexSplit[1];
-    console.log('index::::', index);
+    // console.log('index::::', index);
     const name = document.getElementById("editProposalName-" + index).value;
     notification(`⌛ Deleting Proposal "${name}"...`)
     try {
