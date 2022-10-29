@@ -2,22 +2,35 @@
 pragma solidity ^0.8.4;
 
 interface IERC20Token {
-  function transfer(address, uint256) external returns (bool);
-  function approve(address, uint256) external returns (bool);
-  function transferFrom(address, address, uint256) external returns (bool);
-  function totalSupply() external view returns (uint256);
-  function balanceOf(address) external view returns (uint256);
-  function allowance(address, address) external view returns (uint256);
+    function transfer(address, uint256) external returns (bool);
 
-  event Transfer(address indexed from, address indexed to, uint256 value);
-  event Approval(address indexed owner, address indexed spender, uint256 value);
+    function approve(address, uint256) external returns (bool);
+
+    function transferFrom(
+        address,
+        address,
+        uint256
+    ) external returns (bool);
+
+    function totalSupply() external view returns (uint256);
+
+    function balanceOf(address) external view returns (uint256);
+
+    function allowance(address, address) external view returns (uint256);
+
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(
+        address indexed owner,
+        address indexed spender,
+        uint256 value
+    );
 }
 
 // Creating the charity contract for helping the NGO's in raising funds for good cause.
 contract Charity {
-
     uint256 internal totalProposals = 0;
     address internal cusdAddress = 0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1;
+    address admin = msg.sender;
 
     // Proposal Struct to store the details
     struct Proposal {
@@ -28,6 +41,7 @@ contract Charity {
         string image;
         bool isActive;
         uint256 amount;
+        bool approved;
         uint256 trackAmount;
     }
 
@@ -41,7 +55,7 @@ contract Charity {
     }
 
     // To  get total count of the proposals
-    function getTotalProposals() public view returns(uint256) {
+    function getTotalProposals() public view returns (uint256) {
         return (totalProposals);
     }
 
@@ -60,6 +74,7 @@ contract Charity {
             _image,
             true, // By default proposal is active
             _amount,
+            false, // By default proposal is not approved
             0 // By default track amount is 0
         );
         totalProposals += 1;
@@ -81,41 +96,60 @@ contract Charity {
         proposals[_index].isActive = _status;
     }
 
+    // approve a proposal
+    function approveOrDisapproveProposal(uint256 index) public {
+        require(msg.sender == admin, "Not admin");
+        proposals[index].approved = !proposals[index].approved;
+    }
+
     // Read Proposal: To retrive the proposal by index
-    function readProposal(uint256 _index) public view returns(
-        string memory, 
-        string memory, 
-        string memory,
-        address,
-        bool,
-        uint256,
-        uint256
-    ) {
+    function readProposal(uint256 _index)
+        public
+        view
+        returns (
+            string memory,
+            string memory,
+            string memory,
+            address,
+            bool,
+            uint256,
+            bool,
+            uint256
+        )
+    {
+        Proposal storage proposal = proposals[_index];
         return (
-            proposals[_index].name,
-            proposals[_index].description,
-            proposals[_index].image,
-            proposals[_index].owner,
-            proposals[_index].isActive,
-            proposals[_index].amount,
-            proposals[_index].trackAmount
+            proposal.name,
+            proposal.description,
+            proposal.image,
+            proposal.owner,
+            proposal.isActive,
+            proposal.amount,
+            proposal.approved,
+            proposal.trackAmount
         );
     }
 
     // Cancel proposal: Terminate the proposal
-    function cancelProposal(uint256 _index) public isProposalOwner(proposals[_index].owner) {
+    function cancelProposal(uint256 _index)
+        public
+        isProposalOwner(proposals[_index].owner)
+    {
         delete proposals[_index];
     }
 
     // Donate: Contributing to proposal and transfer the funds to owner and add the tracking amount
     function donateProposal(uint256 _index, uint256 _amount) external payable {
         require(_amount >= 0.01 ether, "Min donation amount is 0.01 cUSD");
-        require(IERC20Token(cusdAddress).transferFrom(
-            msg.sender,
-            proposals[_index].owner,
-            _amount
-        ), "Transfer failed");
+        require(proposals[_index].approved == true, "Admin hasnt approved");
+        require(
+            IERC20Token(cusdAddress).transferFrom(
+                msg.sender,
+                proposals[_index].owner,
+                _amount
+            ),
+            "Transfer failed"
+        );
         proposals[_index].trackAmount += _amount;
     }
-
 }
