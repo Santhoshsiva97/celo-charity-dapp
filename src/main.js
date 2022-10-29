@@ -382,7 +382,7 @@ document.querySelector("#charity").addEventListener("click", async (e) => {
     }
     notification(`🎉 You successfully deleted the "${name}".`)
     getProposals()
-    setTimeout(notificationOff, 5000);
+    setTimeout(notificationOff, 5000)
   }
 })
 
